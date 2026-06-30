@@ -1,0 +1,54 @@
+name: Release NewOpcodes.cleo
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+**'
+    branches:
+      - temp
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          submodules: "recursive"
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
+
+      - name: Build Release Win32
+        shell: pwsh
+        run: |
+          msbuild .\newOcpodes.sln `
+            /m `
+            /p:Configuration=Release `
+            /p:Platform=Win32 `
+            /p:OutDir="${{ github.workspace }}\build\\" `
+            /p:TargetName=NewOpcodes `
+            /p:TargetExt=.cleo
+
+      - name: Collect release asset
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\release" | Out-Null
+          $built = Get-ChildItem -Path "${{ github.workspace }}\build" -Filter "*.cleo" -Recurse | Select-Object -First 1
+          if (-not $built) {
+            throw "No .cleo output found under build directory."
+          }
+          Copy-Item -Path $built.FullName -Destination "${{ github.workspace }}\release\NewOpcodes.cleo" -Force
+
+      - name: Publish GitHub Release
+        uses: ncipollo/release-action@440c8c1cb0ed28b9f43e4d1d670870f059653174 # v1.16.0
+        with:
+          tag: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          artifacts: release/NewOpcodes.cleo
+          allowUpdates: true
+          generateReleaseNotes: true
