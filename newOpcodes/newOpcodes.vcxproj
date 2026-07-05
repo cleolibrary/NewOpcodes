@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8A4AD354-31A6-4DBE-90CE-BB98E62067AB}</ProjectGuid>
-    <RootNamespace>newOcpodes</RootNamespace>
+    <RootNamespace>newOpcodes</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

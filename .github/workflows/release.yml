@@ -44,7 +44,7 @@ jobs:
       - name: Build Release Win32
         shell: pwsh
         run: |
-          msbuild .\newOcpodes.sln `
+          msbuild .\newOpcodes.sln `
             /m `
             /p:Configuration=Release `
             /p:Platform=Win32 `

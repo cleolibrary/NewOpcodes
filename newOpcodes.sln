@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "newOcpodes", "newOcpodes\newOcpodes.vcxproj", "{8A4AD354-31A6-4DBE-90CE-BB98E62067AB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "newOpcodes", "newOpcodes\newOpcodes.vcxproj", "{8A4AD354-31A6-4DBE-90CE-BB98E62067AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
