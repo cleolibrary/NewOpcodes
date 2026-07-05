@@ -23,6 +23,24 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
 
+      - name: Build plugin-sdk static library
+        shell: pwsh
+        run: |
+          $sdkDir = "${{ github.workspace }}\plugin-sdk"
+          $env:PLUGIN_SDK_DIR = $sdkDir
+
+          & "$sdkDir\tools\premake\premake5.exe" vs2022 --pluginsdkdir="$sdkDir" --file="$sdkDir\tools\premake\premake5.lua"
+
+          msbuild .\plugin-sdk\plugin.sln `
+            /m `
+            /t:Plugin_SA `
+            /p:Configuration=Release `
+            /p:Platform="Mixed Platforms"
+
+          if (-not (Test-Path "$sdkDir\output\lib\Plugin.lib")) {
+            throw "plugin-sdk build did not produce Plugin.lib"
+          }
+
       - name: Build Release Win32
         shell: pwsh
         run: |
