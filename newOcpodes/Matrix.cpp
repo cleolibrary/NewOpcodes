@@ -1,6 +1,7 @@
 #include "Matrix.h"
 #include <math.h>
-#include "game_sa\RenderWare.h"
+#include <cstdint>
+#include "RenderWare.h"
 #include "game_sa\CGeneral.h"
 #include "game_sa\common.h"
 
@@ -24,7 +25,7 @@ OpcodeResult WINAPI Matrix::RotateOnAxis(CScriptThread* thread)
 	OpcodeParams params(thread, 6);
 	RwMatrix *matrix; RwV3d axis; float angle; unsigned int combineOp;
 	params >> matrix >> axis >> angle >> combineOp;
-	RwMatrixRotate(matrix, &axis, angle, combineOp);
+	RwMatrixRotate(matrix, &axis, angle, static_cast<RwOpCombineType>(combineOp));
     return OR_CONTINUE;
 }
 
@@ -111,7 +112,7 @@ OpcodeResult WINAPI Matrix::GetLocalOffset(CScriptThread* thread)
 	OpcodeParams params(thread, 7);
 	CVector coors, result; CMatrix *matrix; CMatrix matrixInv;
 	params >> coors >> matrix;
-	RwMatrixInvert(&matrixInv, matrix);
+	RwMatrixInvert(reinterpret_cast<RwMatrix *>(&matrixInv), reinterpret_cast<RwMatrix *>(matrix));
 	result = Multiply3x3(matrixInv, VectorSub(coors, (CVector&)matrix->pos));
 	params << result;
 	return OR_CONTINUE;
@@ -214,7 +215,8 @@ OpcodeResult WINAPI Matrix::Slerp(CScriptThread* thread)
 	OpcodeParams params(thread, 4);
 	CMatrix *out, *matrix1, *matrix2; float t; CQuaternion quat, quat1, quat2;
 	params >> out >> matrix1 >> matrix2 >> t;
-	quat1.Set(*matrix1); quat2.Set(*matrix2);
+	quat1.Set(*reinterpret_cast<RwMatrix *>(matrix1));
+	quat2.Set(*reinterpret_cast<RwMatrix *>(matrix2));
 	quat.Slerp(quat1, quat2, t);
 	out->SetRotate(quat);
 	return OR_CONTINUE;
@@ -229,6 +231,6 @@ OpcodeResult WINAPI Matrix::Setup(CScriptThread* thread)
 	CMatrix *matrix;
 	params >> matrix;
 	for(int i = 0; i < 16; i++)
-		params >> *(float *)((unsigned int)matrix + 4 * i);
+		params >> *reinterpret_cast<float *>(reinterpret_cast<uintptr_t>(matrix) + 4 * i);
     return OR_CONTINUE;
 }

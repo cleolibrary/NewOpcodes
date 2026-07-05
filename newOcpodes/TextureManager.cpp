@@ -1,10 +1,11 @@
 #include "TextureManager.h"
+#include <cstring>
 
 TextureManager TexMgr;
 
 RwTexture *TextureManager::LoadTextureFromPNGFile(char *path)
 {
-	unsigned int width, height, depth, flags; RwImage *image; char fileName[_MAX_FNAME];
+	RwInt32 width, height, depth, flags; RwImage *image; char fileName[_MAX_FNAME];
 	RwRaster *raster; RwTexture **freeTex = NULL;
 	for(int i = 0; i < MAX_NO_TEXTURES; i++)
 	{
@@ -34,7 +35,7 @@ RwTexture *TextureManager::LoadTextureFromPNGFile(char *path)
 
 RwTexture *TextureManager::LoadMaskedTextureFromBMPFile(char *imagePath, char *maskPath)
 {
-	unsigned int width, height, depth, flags; RwImage *image, *mask; char fileName[_MAX_FNAME];
+	RwInt32 width, height, depth, flags; RwImage *image, *mask; char fileName[_MAX_FNAME];
 	RwRaster *raster; RwTexture **freeTex = NULL;
 	for(int i = 0; i < MAX_NO_TEXTURES; i++)
 	{
@@ -84,8 +85,12 @@ RwTexture *TextureManager::LoadTextureFromDDSFile(char *path)
 	}
 	if(freeTex)
 	{
-		strncpy(texPath, path, strlen(path) - 4);
-		rwTex = RwD3D9DDSTextureRead(texPath);
+		size_t pathLen = strlen(path);
+		if(pathLen < 4)
+			return NULL;
+		memcpy(texPath, path, pathLen - 4);
+		texPath[pathLen - 4] = '\0';
+		rwTex = RwD3D9DDSTextureRead(texPath, NULL);
 		if(rwTex)
 		{
 			*freeTex = rwTex;

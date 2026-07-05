@@ -2,6 +2,8 @@
 #include "game_sa\CVehicle.h"
 #include "game_sa\CClumpModelInfo.h"
 #include "game_sa\CVisibilityPlugins.h"
+#include "game_sa\NodeName.h"
+#include <cstdint>
 
 // 0D0C=3,get_car %1d% component %2s% matrix_to %3d% // IF and SET
 // 0D0C: get_car 0@ component "wheel_lf_dummy" matrix_to 1@ // IF and SET
@@ -84,7 +86,15 @@ OpcodeResult WINAPI Component::SetComponentModelAlpha(CScriptThread* thread)
 		component = CClumpModelInfo::GetFrameFromName((RpClump *)vehicle->m_pRwObject, name);
 		if(component)
 		{
-			RwFrameForAllObjects(component, CVehicle::SetComponentAtomicAlpha, (void *)alpha);
+			RwFrameForAllObjects(
+				component, 
+				[](RwObject *object, void *data) -> RwObject * 
+				{
+					if(RwObjectGetType(object) == rpATOMIC)
+						CVehicle::SetComponentAtomicAlpha(reinterpret_cast<RpAtomic *>(object), static_cast<int>(reinterpret_cast<uintptr_t>(data)));
+					return object;
+				}, 
+				reinterpret_cast<void *>(alpha));
 			params << orTrue;
 			return OR_CONTINUE;
 		}
@@ -125,7 +135,7 @@ OpcodeResult WINAPI Component::GetName(CScriptThread* thread)
 	OpcodeParams params(thread, 2);
 	RwFrame *component;
 	params >> component;
-	params << component->nodeName;
+	params << GetFrameNodeName(component);
 	return OR_CONTINUE;
 }
 
@@ -172,33 +182,24 @@ struct AtomicSearchInfo
 	RpAtomic *result;
 };
 
-RpAtomic *CountObjectsInFrame(RpAtomic *atomic, unsigned int *counter)
-{
-	++*counter;
-	return atomic;
-}
-
-RpAtomic *GetObjectInFrame(RpAtomic *atomic, AtomicSearchInfo *data)
-{
-	if(data->counter == data->number)
-	{
-		data->result = atomic;
-		return NULL;
-	}
-	data->counter++;
-	return atomic;
-}
-
 // 0D75=2,%2d% = component %1d% num_objects
 // 0D75: 1@ = component 0@ num_objects
 // SCR: GET_COMPONENT_NUM_OBJECTS
 OpcodeResult WINAPI Component::GetComponentNumObjects(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 2);
-	RwFrame *component; unsigned int count = 0;
+	RwFrame *component;
 	params >> component;
 	unsigned int counter = 0;
-	RwFrameForAllObjects(component, CountObjectsInFrame, &counter);
+    RwFrameForAllObjects(
+		component, 
+		[](RwObject* object, void* data) -> RwObject* 
+		{
+			if (RwObjectGetType(object) == rpATOMIC)
+				++(*reinterpret_cast<unsigned int*>(data));
+			return object;
+		}, 
+		&counter);
 	params << counter;
 	return OR_CONTINUE;
 }
@@ -215,7 +216,21 @@ OpcodeResult WINAPI Component::GetComponentObject(CScriptThread* thread)
 	data.counter = 0;
 	data.number = number;
 	data.result = NULL;
-	RwFrameForAllObjects(component, GetObjectInFrame, &data);
+    RwFrameForAllObjects(
+        component,
+        [](RwObject* object, void* rawData) -> RwObject* 
+		{
+			AtomicSearchInfo* data = reinterpret_cast<AtomicSearchInfo*>(rawData);
+			if (RwObjectGetType(object) == rpATOMIC) {
+				if (data->counter == data->number) {
+					data->result = reinterpret_cast<RpAtomic*>(object);
+					return NULL;
+				}
+				data->counter++;
+			}
+			return object;
+        },
+        &data);
 	params << data.result;
 	if(data.result)
 		params << orTrue;
@@ -263,9 +278,9 @@ OpcodeResult WINAPI Component::SetObjectAtomicFlag(CScriptThread* thread)
 	RpAtomic *object; unsigned int flag, state;
 	params >> object >> flag >> state;
 	if(state)
-		CVisibilityPlugins::SetAtomicFlag(object, flag);
+		CVisibilityPlugins::SetAtomicFlag(object, static_cast<int>(flag));
 	else
-		CVisibilityPlugins::ClearAtomicFlag(object, flag);
+		CVisibilityPlugins::ClearAtomicFlag(object, static_cast<int>(flag));
 	return OR_CONTINUE;
 }
 

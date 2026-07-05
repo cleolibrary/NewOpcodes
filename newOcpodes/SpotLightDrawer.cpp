@@ -1,11 +1,11 @@
 #include "SpotLightDrawer.h"
-#include "patch\CPatch.h"
+#include "Patch.h"
 
 SpotLightDrawer spotlightDrawer;
 
 void SpotLightDrawer::Initialise()
 {
-	CPatch::RedirectCall(0x53E1D6, DrawSpotLights);
+	plugin::patch::RedirectCall(0x53E1D6, DrawSpotLights);
 }
 
 auto DrawSpotLightCone = (void(cdecl *)(int, float, float, float, float, float, float, float, float, char, char, 
@@ -13,7 +13,7 @@ auto DrawSpotLightCone = (void(cdecl *)(int, float, float, float, float, float, 
 
 void SpotLightDrawer::DrawSpotLights()
 {
-	CALLVOID(0x493E30);
+	plugin::CallDynGlobal(0x493E30);
 	CVector vec(0.0f, 0.0f, 0.0f);
 	if(spotlightDrawer.m_dwNumSpotLightsThisFrame > 0)
 	{

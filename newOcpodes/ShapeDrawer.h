@@ -1,8 +1,8 @@
 #pragma once
 
-#include "game_sa\RenderWare.h"
+#include "RenderWare.h"
 #include "TextureManager.h"
-#include "game_sa\CRGBA.h"
+#include "CRGBA.h"
 
 #define MAX_NO_SHAPES 100
 #define MAX_NO_VERTICES 20

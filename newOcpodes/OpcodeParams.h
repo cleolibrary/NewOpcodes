@@ -1,15 +1,15 @@
 #pragma once
 
 #include "CLEO.h"
-#include "game_sa\RenderWare.h"
-#include "game_sa\CVector.h"
+#include "RenderWare.h"
+#include "CVector.h"
 #include "game_sa\CMatrix.h"
 #include "game_sa\CVehicle.h"
 #include "game_sa\CPed.h"
 #include "game_sa\CObject.h"
 #include "game_sa\AnimBlendFrameData.h"
 #include "game_sa\CColPoint.h"
-#include "game_sa\CRGBA.h"
+#include "CRGBA.h"
 
 enum eOpcodeResult
 {

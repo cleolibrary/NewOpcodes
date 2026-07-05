@@ -38,12 +38,13 @@ OpcodeResult WINAPI Txd::FindTextureInTxdWithName(CScriptThread* thread)
 	OpcodeParams params(thread, 3);
 	char texName[100], txdName[100]; int index; RwTexDictionary *dictionary; RwTexture *texture;
 	params >> texName >> txdName;
-	index = CTxdStore::FindTxdSlot(texName);
+	index = CTxdStore::FindTxdSlot(txdName);
 	if(index != -1)
 	{
-		if(!CTxdStore::ms_pTxdPool->m_ByteMap[index].bIsFreeSlot)
+		TxdDef *txd = CTxdStore::ms_pTxdPool->GetAt(index);
+		if(txd && txd->m_pRwDictionary)
 		{
-			dictionary = CTxdStore::ms_pTxdPool->m_Objects[index].m_pRwDictionary;
+			dictionary = txd->m_pRwDictionary;
 			texture = RwTexDictionaryFindNamedTexture(dictionary, texName);
 			if(texture)
 			{
@@ -66,9 +67,10 @@ OpcodeResult WINAPI Txd::FindTextureInTxdWithId(CScriptThread* thread)
 	params >> texName >> index;
 	if(index != -1)
 	{
-		if(!CTxdStore::ms_pTxdPool->m_ByteMap[index].bIsFreeSlot)
+		TxdDef *txd = CTxdStore::ms_pTxdPool->GetAt(index);
+		if(txd && txd->m_pRwDictionary)
 		{
-			dictionary = CTxdStore::ms_pTxdPool->m_Objects[index].m_pRwDictionary;
+			dictionary = txd->m_pRwDictionary;
 			texture = RwTexDictionaryFindNamedTexture(dictionary, texName);
 			if(texture)
 			{

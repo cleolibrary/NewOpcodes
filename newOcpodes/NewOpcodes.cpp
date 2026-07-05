@@ -1,5 +1,5 @@
 #include "NewOpcodes.h"
-#include "plugin\plugin.h"
+#include "plugin.h"
 #include "Matrix.h"
 #include "Bone.h"
 #include "Component.h"
@@ -33,11 +33,10 @@ bool NewOpcodes::Initialise()
 		if(!CLEO_RegisterOpcode(OPCODE_BASE_ID + i, OpcodeFunctions[i]))
 			return false;
 	}
-	plugin::System::RegisterPlugin("NewOpcodes", "DK22Pac", "newOpcodes.cleo", "2.0", 0x000200, GAME_SA_1_0_US, NULL);
-	plugin::Core::RegisterFunc(FUNC_INITIALISE_SCRIPTS, ReInitialise);
-	plugin::Core::RegisterFunc(FUNC_SHUTDOWN_RW, Shutdown);
-	plugin::Core::RegisterFunc(FUNC_DRAWING, DefaultDraw);
-	plugin::Core::RegisterFunc(FUNC_GAME_PROCESS_BEFORE_SCRIPTS, BeforeScriptsProcessing);
+	plugin::Events::initScriptsEvent += ReInitialise;
+	plugin::Events::shutdownRwEvent += Shutdown;
+	plugin::Events::drawingEvent += DefaultDraw;
+	plugin::Events::processScriptsEvent.before += BeforeScriptsProcessing;
 	return true;
 }
 

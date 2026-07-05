@@ -8,7 +8,7 @@ OpcodeResult WINAPI Quat::FromMatrix(CScriptThread* thread)
 	OpcodeParams params(thread, 2);
 	CMatrix *matrix; CQuaternion *quat;
 	params >> matrix >> quat;
-	quat->Set(*matrix);
+	quat->Set(*reinterpret_cast<RwMatrix *>(matrix));
     return OR_CONTINUE;
 }
 
@@ -20,7 +20,7 @@ OpcodeResult WINAPI Quat::Rotate(CScriptThread* thread)
 	OpcodeParams params(thread, 6);
 	RtQuat *quat; RwV3d axis; float angle; unsigned int combineOp;
 	params >> quat >> axis >> angle >> combineOp;
-	RtQuatRotate(quat, &axis, angle, combineOp);
+	RtQuatRotate(quat, &axis, angle, static_cast<RwOpCombineType>(combineOp));
     return OR_CONTINUE;
 }
 

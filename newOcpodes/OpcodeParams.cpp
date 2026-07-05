@@ -213,20 +213,20 @@ OpcodeParams& OpcodeParams::operator<<(CVector value)
 
 OpcodeParams& OpcodeParams::operator>>(CRGBA &result)
 {
-	result.red = CLEO_GetIntOpcodeParam(pThread);
-	result.green = CLEO_GetIntOpcodeParam(pThread);
-	result.blue = CLEO_GetIntOpcodeParam(pThread);
-	result.alpha = CLEO_GetIntOpcodeParam(pThread);
+	result.r = CLEO_GetIntOpcodeParam(pThread);
+	result.g = CLEO_GetIntOpcodeParam(pThread);
+	result.b = CLEO_GetIntOpcodeParam(pThread);
+	result.a = CLEO_GetIntOpcodeParam(pThread);
 	paramsCount -= 4;
 	return *this;
 }
 
 OpcodeParams& OpcodeParams::operator<<(CRGBA value)
 {
-	CLEO_SetIntOpcodeParam(pThread, value.red);
-	CLEO_SetIntOpcodeParam(pThread, value.green);
-	CLEO_SetIntOpcodeParam(pThread, value.blue);
-	CLEO_SetIntOpcodeParam(pThread, value.alpha);
+	CLEO_SetIntOpcodeParam(pThread, value.r);
+	CLEO_SetIntOpcodeParam(pThread, value.g);
+	CLEO_SetIntOpcodeParam(pThread, value.b);
+	CLEO_SetIntOpcodeParam(pThread, value.a);
 	paramsCount -= 4;
 	return *this;
 }

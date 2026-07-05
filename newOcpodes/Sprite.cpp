@@ -8,7 +8,7 @@ OpcodeResult WINAPI Sprite::DrawSprite(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 10);
 	CRect rect; CRGBA color; float angle; unsigned int texture;
-	params >> texture >> rect.m_fLeft >> rect.m_fTop >> rect.m_fRight >> rect.m_fBottom >> color >> angle;
+	params >> texture >> rect.left >> rect.top >> rect.right >> rect.bottom >> color >> angle;
 	spriteDrawer.DrawSpriteThisFrame((RwTexture *)texture, rect, color, color, color, color, angle);
     return OR_CONTINUE;
 }
@@ -20,7 +20,7 @@ OpcodeResult WINAPI Sprite::DrawSpriteWithGradient(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 22);
 	CRect rect; CRGBA color[4]; float angle; unsigned int texture;
-	params >> texture >> rect.m_fLeft >> rect.m_fTop >> rect.m_fRight >> rect.m_fBottom >> color[0] >> color[1] >> color[2] >>
+	params >> texture >> rect.left >> rect.top >> rect.right >> rect.bottom >> color[0] >> color[1] >> color[2] >>
 		color[3] >> angle;
 	spriteDrawer.DrawSpriteThisFrame((RwTexture *)texture, rect, color[0], color[1], color[2], color[3], angle);
     return OR_CONTINUE;

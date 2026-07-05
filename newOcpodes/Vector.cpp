@@ -1,5 +1,5 @@
 #include "Vector.h"
-#include "game_sa\CVector.h"
+#include "CVector.h"
 
 // 0D1C=1,normalize_vector %1d%
 // 0D1C: normalize_vector 0@
@@ -9,7 +9,7 @@ OpcodeResult WINAPI Vector::Normalise(CScriptThread* thread)
 	OpcodeParams params(thread, 1);
 	CVector *vector;
 	params >> vector;
-	vector->Normalise();
+	vector->Normalize();
     return OR_CONTINUE;
 }
 

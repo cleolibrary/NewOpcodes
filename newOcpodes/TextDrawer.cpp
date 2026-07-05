@@ -8,20 +8,20 @@ void TextDrawer::DrawPrints()
 	{
 		CFont::SetScale(m_aPrints[i].m_fWidth, m_aPrints[i].m_fHeight);
 		CFont::SetFontStyle(m_aPrints[i].m_nStyle);
-		CFont::SetProp(m_aPrints[i].m_nProp);
+		CFont::SetProportional(m_aPrints[i].m_nProp != 0);
 		CFont::SetJustify(m_aPrints[i].m_nJustify);
-		CFont::SetAlignment((eFontAlignment)m_aPrints[i].m_nAlign);
+		CFont::SetOrientation((eFontAlignment)m_aPrints[i].m_nAlign);
 		if(m_aPrints[i].m_nOutline || m_aPrints[i].m_nShadow)
 		{
 			if(m_aPrints[i].m_nOutline)
-				CFont::SetOutlinePosition(m_aPrints[i].m_nOutline);
+				CFont::SetEdge(m_aPrints[i].m_nOutline);
 			else
 				CFont::SetDropShadowPosition(m_aPrints[i].m_nShadow);
 			CFont::SetDropColor(m_aPrints[i].m_DropColor);
 		}
 		else
 		{
-			CFont::SetOutlinePosition(0);
+			CFont::SetEdge(0);
 			CFont::SetDropShadowPosition(0);
 		}
 		if(m_aPrints[i].m_nBackground)

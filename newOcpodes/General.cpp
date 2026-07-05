@@ -261,7 +261,7 @@ OpcodeResult WINAPI General::GetModelTxd(CScriptThread* thread)
 	params >> mi;
 	CBaseModelInfo *model = CModelInfo::ms_modelInfoPtrs[mi];
 	if(model)
-		params << model->m_wTxdIndex << orTrue;
+		params << model->m_nTxdIndex << orTrue;
 	else
 		params << -1 << orFalse;
 	return OR_CONTINUE;
@@ -277,7 +277,7 @@ OpcodeResult WINAPI General::GetModelCRC(CScriptThread* thread)
 	params >> mi;
 	CBaseModelInfo *model = CModelInfo::ms_modelInfoPtrs[mi];
 	if(model)
-		params << model->m_dwKey << orTrue;
+		params << model->m_nKey << orTrue;
 	else
 		params << 0 << orFalse;
 	return OR_CONTINUE;
@@ -442,7 +442,7 @@ OpcodeResult WINAPI General::AddCorona(CScriptThread* thread)
 		}
 	}
 	CCoronas::RegisterCorona(NewOpcodes::m_nCurrentCoronaId, (CEntity *)entity, red, green, blue, alpha, posn, size, 100.0f,
-		(RwTexture *)texture, 0, false, false, 0, 0.0f, false, 0.15f, 0, 15.0f, false, false);
+		(RwTexture *)texture, FLARETYPE_NONE, false, false, 0, 0.0f, false, 0.15f, 0, 15.0f, false, false);
 	NewOpcodes::m_nCurrentCoronaId++;
 	return OR_CONTINUE;
 }
@@ -481,7 +481,7 @@ OpcodeResult WINAPI General::AddCoronaEx(CScriptThread* thread)
 		}
 	}
 	CCoronas::RegisterCorona(NewOpcodes::m_nCurrentCoronaId, (CEntity *)entity, red, green, blue, alpha, posn, size, farClip,
-		(RwTexture *)texture, flare, reflection, checkObstacles, 0, 0.0f, false, nearClip, flashWhileFading, fadeSpeed, 
+		(RwTexture *)texture, static_cast<eCoronaFlareType>(flare), reflection, checkObstacles, 0, 0.0f, false, nearClip, flashWhileFading, fadeSpeed, 
 		onlyFromBelow, false);
 	NewOpcodes::m_nCurrentCoronaId++;
 	return OR_CONTINUE;
@@ -615,7 +615,7 @@ OpcodeResult WINAPI General::GetVehicleClass(CScriptThread* thread)
 	CVehicle *vehicle; unsigned int handle;
 	params >> handle;
 	vehicle = params.AtHandle<CVehicle>(handle);
-	params << vehicle->m_dwVehicleClass << vehicle->m_dwVehicleSubClass;
+	params << static_cast<unsigned int>(vehicle->m_nVehicleClass) << static_cast<unsigned int>(vehicle->m_nVehicleSubClass);
 	return OR_CONTINUE;
 }
 
@@ -631,10 +631,10 @@ OpcodeResult WINAPI General::GetVehicleDummyPosn(CScriptThread* thread)
 	if(dummy < 15)
 	{
 		vehicle = params.AtHandle<CVehicle>(handle);
-		vehModel = (CVehicleModelInfo *)CModelInfo::ms_modelInfoPtrs[vehicle->m_wModelIndex];
+		vehModel = (CVehicleModelInfo *)CModelInfo::ms_modelInfoPtrs[vehicle->m_nModelIndex];
 		if(vehModel && vehModel->m_pVehicleStruct)
 		{
-			posn = vehModel->m_pVehicleStruct->m_avDummyPosn[dummy];
+			posn = vehModel->m_pVehicleStruct->m_avDummyPos[dummy];
 			if(xflag)
 				posn.x *= -1.0f;
 			if(posflag)
@@ -682,7 +682,6 @@ OpcodeResult WINAPI General::SetCarCustomColor(CScriptThread* thread)
 	return OR_CONTINUE;
 }
 
-#define RsGlobal ((RsGlobalType *)0xC17040)
 #define SfxVol (*(unsigned char *)0xBA6797)
 #define RadioVol (*(unsigned char *)0xBA6798)
 
@@ -710,8 +709,8 @@ OpcodeResult WINAPI General::GetScreenWidthHeight(CScriptThread* thread)
 	unsigned int type;
 	params >> type;
 	if(!params.IsOptionalParam())
-		params << (type? (float)RsGlobal->MaximumWidth : RsGlobal->MaximumWidth);
+		params << (type? (float)RsGlobal.maximumWidth : RsGlobal.maximumWidth);
 	if(!params.IsOptionalParam())
-		params << (type? (float)RsGlobal->MaximumHeight : RsGlobal->MaximumHeight);
+		params << (type? (float)RsGlobal.maximumHeight : RsGlobal.maximumHeight);
 	return OR_CONTINUE;
 }

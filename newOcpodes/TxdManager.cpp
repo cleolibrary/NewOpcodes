@@ -43,7 +43,8 @@ void TxdManager::CleanAll()
 		{
 			if(m_aTxds[i].m_id != -1)
 			{
-				if(!CTxdStore::ms_pTxdPool->m_ByteMap[m_aTxds[i].m_id].bIsFreeSlot && CTxdStore::ms_pTxdPool->m_Objects[i].m_pRwDictionary)
+				TxdDef *txd = CTxdStore::ms_pTxdPool->GetAt(m_aTxds[i].m_id);
+				if(txd && txd->m_pRwDictionary)
 					CTxdStore::RemoveTxd(m_aTxds[i].m_id);
 			}
 			m_aTxds[i].m_isUsed = false;

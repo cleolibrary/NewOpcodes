@@ -16,7 +16,7 @@ OpcodeResult WINAPI Colpoint::GetCollisionBetweenPoints(CScriptThread* thread)
 		flag[6], flag[7]);
 	CWorld::pIgnoreEntity = NULL;
 	if(result)
-		params << colPoint->m_vPoint << colEntity << orTrue;
+		params << colPoint->m_vecPoint << colEntity << orTrue;
 	else
 		params << CVector(0.0, 0.0, 0.0) << NULL << orFalse;
 	return OR_CONTINUE;
@@ -30,7 +30,7 @@ OpcodeResult WINAPI Colpoint::GetNormal(CScriptThread* thread)
 	OpcodeParams params(thread, 4);
 	CColPoint *colPoint;
 	params >> colPoint;
-	params << colPoint->m_vNormal;
+	params << colPoint->m_vecNormal;
 	return OR_CONTINUE;
 }
 
@@ -66,6 +66,6 @@ OpcodeResult WINAPI Colpoint::GetLighting(CScriptThread* thread)
 	OpcodeParams params(thread, 2);
 	CColPoint *colPoint;
 	params >> colPoint;
-	params << colPoint->m_nLightingB;
+	params << static_cast<unsigned char>(colPoint->m_nLightingB.day | (colPoint->m_nLightingB.night << 4));
 	return OR_CONTINUE;
 }

@@ -1,11 +1,11 @@
 #pragma once
 
 #include "game_sa\CRect.h"
-#include "game_sa\CRGBA.h"
+#include "CRGBA.h"
 
 #define MAX_NO_SPRITES 200
 
-#include "game_sa\RenderWare.h"
+#include "RenderWare.h"
 
 class NOSprite
 {

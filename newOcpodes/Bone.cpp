@@ -18,7 +18,7 @@ OpcodeResult WINAPI Bone::GetMatrix(CScriptThread* thread)
 	ped->UpdateRpHAnim();
 	RpHAnimHierarchy *hierarchy = GetAnimHierarchyFromSkinClump((RpClump *)ped->m_pRwObject);
 	if(!hierarchy)
-		params << ped->m_pCoords;
+		params << reinterpret_cast<RwMatrix *>(&ped->GetMatrix());
 	else
 		params << &RpHAnimHierarchyGetMatrixArray(hierarchy)[RpHAnimIDGetIndex(hierarchy, bone)];
 	params << orTrue;
@@ -54,7 +54,7 @@ OpcodeResult WINAPI Bone::GetBone(CScriptThread* thread)
 			params << NULL << orFalse;
 	}
 	else
-		params << &RpClumpGetAnimBlendClumpData((RpClump *)ped->m_pRwObject)->m_pBones[boneIndex] << orTrue;
+		params << &RpClumpGetAnimBlendClumpData((RpClump *)ped->m_pRwObject)->m_pFrames[boneIndex] << orTrue;
 	return OR_CONTINUE;
 }
 
@@ -66,7 +66,7 @@ OpcodeResult WINAPI Bone::GetBoneOffset(CScriptThread* thread)
 	OpcodeParams params(thread, 2);
 	AnimBlendFrameData *bone;
 	params >> bone;
-	params << &bone->m_vOffset;
+	params << &bone->m_vecOffset;
 	return OR_CONTINUE;
 }
 
@@ -78,6 +78,14 @@ OpcodeResult WINAPI Bone::GetBoneQuat(CScriptThread* thread)
 	OpcodeParams params(thread, 2);
 	AnimBlendFrameData *bone;
 	params >> bone;
-	params << &bone->m_pIFrame->m_qOrientation;
+	static CQuaternion sBoneQuat;
+	if(!bone || !bone->m_pIFrame)
+	{
+		params << NULL;
+		return OR_CONTINUE;
+	}
+	RwFrame *frame = reinterpret_cast<RwFrame *>(bone->m_pIFrame);
+	sBoneQuat.Set(*RwFrameGetLTM(frame));
+	params << &sBoneQuat;
 	return OR_CONTINUE;
 }

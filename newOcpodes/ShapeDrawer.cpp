@@ -1,21 +1,22 @@
 #include "ShapeDrawer.h"
+#include <cstdint>
 
 ShapeDrawer shapeDrawer;
 
 void NOShape::Draw()
 {
 	if(m_pTexture)
-		RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATETEXTURERASTER, m_pTexture->raster);
+		RwRenderStateSet(rwRENDERSTATETEXTURERASTER, m_pTexture->raster);
 	else
-		RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)m_nAlphaEnable);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATESRCBLEND, (void *)m_nBlendSrc);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEDESTBLEND, (void *)m_nBlendDst);
-	RwEngineInstance->dOpenDevice.fpIm2DRenderPrimitive((RwPrimitiveType)m_nPrimType, m_vertices, m_nNumVertices);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATETEXTURERASTER, 0);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)TRUE);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATESRCBLEND, (void *)5);
-	RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEDESTBLEND, (void *)6);
+		RwRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
+	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(static_cast<uintptr_t>(m_nAlphaEnable)));
+	RwRenderStateSet(rwRENDERSTATESRCBLEND, reinterpret_cast<void *>(static_cast<uintptr_t>(m_nBlendSrc)));
+	RwRenderStateSet(rwRENDERSTATEDESTBLEND, reinterpret_cast<void *>(static_cast<uintptr_t>(m_nBlendDst)));
+	RwIm2DRenderPrimitive((RwPrimitiveType)m_nPrimType, reinterpret_cast<RwIm2DVertex *>(m_vertices), m_nNumVertices);
+	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, 0);
+	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
+	RwRenderStateSet(rwRENDERSTATESRCBLEND, reinterpret_cast<void *>(5));
+	RwRenderStateSet(rwRENDERSTATEDESTBLEND, reinterpret_cast<void *>(6));
 }
 
 bool ShapeDrawer::DrawShapeThisFrame(unsigned char primType, unsigned char numVertices,
@@ -62,5 +63,5 @@ void ShapeDrawer::SetupShapeVertex(RwD3D9Vertex *vertex, RwV3d posn, float u, fl
 	vertex->u = u;
 	vertex->v = v;
 	vertex->rhw = rhw;
-	vertex->emissiveColor = color.colorInt;
+	vertex->emissiveColor = color.ToInt();
 }

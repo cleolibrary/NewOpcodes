@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game_sa\CVector.h"
+#include "CVector.h"
 
 #define MAX_NO_SPOTLIGHTS 100
 

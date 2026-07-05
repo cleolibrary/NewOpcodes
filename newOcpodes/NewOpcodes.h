@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include "CLEO.h"
-#include "game_sa\RenderWare.h"
+#include "RenderWare.h"
 #include "game_sa\CColPoint.h"
 #include "ShapeDrawer.h"
 

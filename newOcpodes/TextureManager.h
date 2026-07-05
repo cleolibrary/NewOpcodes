@@ -2,7 +2,7 @@
 
 #define MAX_NO_TEXTURES 500
 
-#include "game_sa\RenderWare.h"
+#include "RenderWare.h"
 
 class TextureManager
 {
