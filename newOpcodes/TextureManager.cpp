@@ -85,8 +85,8 @@ RwTexture *TextureManager::LoadTextureFromDDSFile(char *path)
 	}
 	if(freeTex)
 	{
-		size_t pathLen = strlen(path);
-		if(pathLen < 4)
+		size_t pathLen = strnlen_s(path, _MAX_PATH);
+		if(pathLen < 4 || pathLen == _MAX_PATH)
 			return NULL;
 		memcpy(texPath, path, pathLen - 4);
 		texPath[pathLen - 4] = '\0';

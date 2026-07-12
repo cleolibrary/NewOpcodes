@@ -78,14 +78,12 @@ OpcodeResult WINAPI Bone::GetBoneQuat(CScriptThread* thread)
 	OpcodeParams params(thread, 2);
 	AnimBlendFrameData *bone;
 	params >> bone;
-	static CQuaternion sBoneQuat;
 	if(!bone || !bone->m_pIFrame)
 	{
 		params << NULL;
 		return OR_CONTINUE;
 	}
-	RwFrame *frame = reinterpret_cast<RwFrame *>(bone->m_pIFrame);
-	sBoneQuat.Set(*RwFrameGetLTM(frame));
-	params << &sBoneQuat;
+	RpHAnimInterpFrame *frame = reinterpret_cast<RpHAnimInterpFrame *>(bone->m_pIFrame);
+    params << &frame->q;
 	return OR_CONTINUE;
 }
