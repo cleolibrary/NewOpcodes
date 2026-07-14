@@ -44,10 +44,17 @@ void TxdManager::CleanAll()
 			if(m_aTxds[i].m_id != -1)
 			{
 				TxdDef *txd = CTxdStore::ms_pTxdPool->GetAt(m_aTxds[i].m_id);
-				if(txd && txd->m_pRwDictionary)
-					CTxdStore::RemoveTxd(m_aTxds[i].m_id);
+				if(txd)
+				{
+					// Balances the AddRef call from AddTxd.
+					CTxdStore::RemoveRef(m_aTxds[i].m_id);
+					txd = CTxdStore::ms_pTxdPool->GetAt(m_aTxds[i].m_id);
+					if(txd)
+						CTxdStore::RemoveTxdSlot(m_aTxds[i].m_id);
+				}
 			}
 			m_aTxds[i].m_isUsed = false;
+			m_aTxds[i].m_id = -1;
 		}
 	}
 }
