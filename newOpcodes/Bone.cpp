@@ -83,7 +83,7 @@ OpcodeResult WINAPI Bone::GetBoneQuat(CScriptThread* thread)
 		params << NULL;
 		return OR_CONTINUE;
 	}
-	RpHAnimInterpFrame *frame = reinterpret_cast<RpHAnimInterpFrame *>(bone->m_pIFrame);
-    params << &frame->q;
+	RtQuat *quat = (RtQuat *)bone->m_pIFrame;
+	params << quat;
 	return OR_CONTINUE;
 }
