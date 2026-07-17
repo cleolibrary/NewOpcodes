@@ -2,6 +2,7 @@
 
 #include "OpcodeParams.h"
 #include "NewOpcodes.h"
+#include "game_sa\CPools.h"
 
 OpcodeParams::OpcodeParams(CScriptThread *thread, unsigned int count)
 {
@@ -351,17 +352,17 @@ OpcodeParams& OpcodeParams::operator<<(float value)
 
 template <> CPed *OpcodeParams::AtHandle(unsigned int handle)
 {
-	return ((CPed *(__thiscall *)(unsigned int, unsigned int))0x404910)(*(unsigned int *)0xB74490, handle);
+	return CPools::GetPed(handle);
 }
 
 template <> CVehicle *OpcodeParams::AtHandle(unsigned int handle)
 {
-	return ((CVehicle *(__thiscall *)(unsigned int, unsigned int))0x4048E0)(*(unsigned int *)0xB74494, handle);
+	return CPools::GetVehicle(handle);
 }
 
 template <> CObject *OpcodeParams::AtHandle(unsigned int handle)
 {
-	return ((CObject *(__thiscall *)(unsigned int, unsigned int))0x465040)(*(unsigned int *)0xB7449C, handle);
+	return CPools::GetObject(handle);
 }
 
 unsigned int OpcodeParams::ToHandle(CPed *ped)

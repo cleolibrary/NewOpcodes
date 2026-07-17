@@ -3,11 +3,15 @@
 #include "SpotLightDrawer.h"
 #include "game_sa\common.h"
 #include "game_sa\CClumpModelInfo.h"
+#include "game_sa\CMenuManager.h"
 #include "game_sa\CModelInfo.h"
 #include "game_sa\CShadows.h"
 #include "game_sa\CPointLights.h"
 #include "game_sa\CCoronas.h"
 #include "game_sa\CDamageManager.h"
+#include "game_sa\CDraw.h"
+#include "game_sa\CTimeCycle.h"
+#include "game_sa\CWeather.h"
 #include <Windows.h>
 #include <math.h>
 
@@ -302,37 +306,37 @@ OpcodeResult WINAPI General::AddTemporaryShadow(CScriptThread* thread)
 		switch ( texture )
 		{
 		case 1:
-		    texture = *(unsigned int *)0xC403E0;
+		    texture = (unsigned int)gpShadowCarTex;
 		    break;
 		case 2:
-		    texture = *(unsigned int *)0xC403E4;
+		    texture = (unsigned int)gpShadowPedTex;
 		    break;
 		case 3:
-		    texture = *(unsigned int *)0xC403F4;
+		    texture = (unsigned int)gpShadowExplosionTex;
 		    break;
 		case 4:
-		    texture = *(unsigned int *)0xC403E8;
+		    texture = (unsigned int)gpShadowHeliTex;
 		    break;
 		case 5:
-		    texture = *(unsigned int *)0xC403F8;
+		    texture = (unsigned int)gpShadowHeadLightsTex;
 		    break;
 		case 6:
-		    texture = *(unsigned int *)0xC40400;
+		    texture = (unsigned int)gpBloodPoolTex;
 		    break;
 		case 7:
-		    texture = *(unsigned int *)0xC403FC;
+		    texture = (unsigned int)gpShadowHeadLightsTex2;
 		    break;
 		case 8:
-		    texture = *(unsigned int *)0xC403EC;
+		    texture = (unsigned int)gpShadowBikeTex;
 		    break;
 		case 9:
-		    texture = *(unsigned int *)0xC403F0;
+		    texture = (unsigned int)gpShadowBaronTex;
 		    break;
 		case 10:
-		    texture = *(unsigned int *)0xC4040C;
+		    texture = (unsigned int)gpPostShadowTex;
 		    break;
 		default:
-			texture = *(unsigned int *)0xC403F4;
+			texture = (unsigned int)gpShadowExplosionTex;
 		}
 	}
 	CShadows::StoreShadowToBeRendered(type, (RwTexture *)texture, &posn, x1, y1, x2, y2, intensity, red, green, blue, distance,
@@ -359,37 +363,37 @@ OpcodeResult WINAPI General::AddPermanentShadow(CScriptThread* thread)
 		switch ( texture )
 		{
 		case 1:
-		    texture = *(unsigned int *)0xC403E0;
+		    texture = (unsigned int)gpShadowCarTex;
 		    break;
 		case 2:
-		    texture = *(unsigned int *)0xC403E4;
+		    texture = (unsigned int)gpShadowPedTex;
 		    break;
 		case 3:
-		    texture = *(unsigned int *)0xC403F4;
+		    texture = (unsigned int)gpShadowExplosionTex;
 		    break;
 		case 4:
-		    texture = *(unsigned int *)0xC403E8;
+		    texture = (unsigned int)gpShadowHeliTex;
 		    break;
 		case 5:
-		    texture = *(unsigned int *)0xC403F8;
+		    texture = (unsigned int)gpShadowHeadLightsTex;
 		    break;
 		case 6:
-		    texture = *(unsigned int *)0xC40400;
+		    texture = (unsigned int)gpBloodPoolTex;
 		    break;
 		case 7:
-		    texture = *(unsigned int *)0xC403FC;
+		    texture = (unsigned int)gpShadowHeadLightsTex2;
 		    break;
 		case 8:
-		    texture = *(unsigned int *)0xC403EC;
+		    texture = (unsigned int)gpShadowBikeTex;
 		    break;
 		case 9:
-		    texture = *(unsigned int *)0xC403F0;
+		    texture = (unsigned int)gpShadowBaronTex;
 		    break;
 		case 10:
-		    texture = *(unsigned int *)0xC4040C;
+		    texture = (unsigned int)gpPostShadowTex;
 		    break;
 		default:
-			texture = *(unsigned int *)0xC403F4;
+			texture = (unsigned int)gpShadowExplosionTex;
 		}
 	}
 	CShadows::AddPermanentShadow(type, (RwTexture *)texture, &posn, x1, y1, x2, y2, intensity, red, green, blue, distance,
@@ -423,22 +427,22 @@ OpcodeResult WINAPI General::AddCorona(CScriptThread* thread)
 		switch ( texture )
 		{
 		case 1:
-		    texture = *(unsigned int *)0xC3E004;
+		    texture = (unsigned int)gpCoronaTexture[1];
 		    break;
 		case 2:
-		    texture = *(unsigned int *)0xC3E008;
+		    texture = (unsigned int)gpCoronaTexture[2];
 		    break;
 		case 3:
-		    texture = *(unsigned int *)0xC3E00C;
+		    texture = (unsigned int)gpCoronaTexture[3];
 		    break;
 		case 4:
-		    texture = *(unsigned int *)0xC3E010;
+		    texture = (unsigned int)gpCoronaTexture[4];
 		    break;
 		case 9:
-		    texture = *(unsigned int *)0xC3E024;
+		    texture = (unsigned int)gpCoronaTexture[9];
 		    break;
 		default:
-			texture = *(unsigned int *)0xC3E000;
+			texture = (unsigned int)gpCoronaTexture[0];
 		}
 	}
 	CCoronas::RegisterCorona(NewOpcodes::m_nCurrentCoronaId, (CEntity *)entity, red, green, blue, alpha, posn, size, 100.0f,
@@ -462,22 +466,22 @@ OpcodeResult WINAPI General::AddCoronaEx(CScriptThread* thread)
 		switch ( texture )
 		{
 		case 1:
-		    texture = *(unsigned int *)0xC3E004;
+		    texture = (unsigned int)gpCoronaTexture[1];
 		    break;
 		case 2:
-		    texture = *(unsigned int *)0xC3E008;
+		    texture = (unsigned int)gpCoronaTexture[2];
 		    break;
 		case 3:
-		    texture = *(unsigned int *)0xC3E00C;
+		    texture = (unsigned int)gpCoronaTexture[3];
 		    break;
 		case 4:
-		    texture = *(unsigned int *)0xC3E010;
+		    texture = (unsigned int)gpCoronaTexture[4];
 		    break;
 		case 9:
-		    texture = *(unsigned int *)0xC3E024;
+		    texture = (unsigned int)gpCoronaTexture[9];
 		    break;
 		default:
-			texture = *(unsigned int *)0xC3E000;
+			texture = (unsigned int)gpCoronaTexture[0];
 		}
 	}
 	CCoronas::RegisterCorona(NewOpcodes::m_nCurrentCoronaId, (CEntity *)entity, red, green, blue, alpha, posn, size, farClip,
@@ -493,8 +497,12 @@ OpcodeResult WINAPI General::AddCoronaEx(CScriptThread* thread)
 OpcodeResult WINAPI General::GetSunColors(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 6);
-	for(int i = 0; i < 12; i += 2)
-		params << *(unsigned short *)(0xB7C4D0 + i);
+	params << CTimeCycle::m_CurrentColours.m_nSunCoreRed
+	       << CTimeCycle::m_CurrentColours.m_nSunCoreGreen
+	       << CTimeCycle::m_CurrentColours.m_nSunCoreBlue
+	       << CTimeCycle::m_CurrentColours.m_nSunCoronaRed
+	       << CTimeCycle::m_CurrentColours.m_nSunCoronaGreen
+	       << CTimeCycle::m_CurrentColours.m_nSunCoronaBlue;
 	return OR_CONTINUE;
 }
 
@@ -504,7 +512,7 @@ OpcodeResult WINAPI General::GetSunColors(CScriptThread* thread)
 OpcodeResult WINAPI General::GetSunScreenCoors(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 2);
-	params << *(float*)0xC3E028 << *(float*)0xC3E02C;
+	params << CCoronas::SunScreenX << CCoronas::SunScreenY;
 	return OR_CONTINUE;
 }
 
@@ -515,8 +523,8 @@ OpcodeResult WINAPI General::GetSunWorldCoors(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 3);
 	CVector *sunPos;
-	float sunDistance = *(float*)0xC3EF9C * 2.0f;
-	sunPos = (CVector *)(*(DWORD *)0xB79FD0 * 12 + 0xB7CA50);
+	float sunDistance = CDraw::ms_fFarClipZ * 2.0f;
+	sunPos = &CTimeCycle::m_VectorToSun[CTimeCycle::m_CurrentStoredValue];
 	if(sunPos->z > -0.1f)
 		params << orTrue;
 	else
@@ -531,7 +539,7 @@ OpcodeResult WINAPI General::GetSunWorldCoors(CScriptThread* thread)
 OpcodeResult WINAPI General::GetSunSize(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 2);
-	params << *(float*)0xB7C4DC * 2.7335f << *(float*)0xB7C4DC * 6.0f;
+	params << CTimeCycle::m_CurrentColours.m_fSunSize * 2.7335f << CTimeCycle::m_CurrentColours.m_fSunSize * 6.0f;
 	return OR_CONTINUE;
 }
 
@@ -541,7 +549,7 @@ OpcodeResult WINAPI General::GetSunSize(CScriptThread* thread)
 OpcodeResult WINAPI General::GetWeather(CScriptThread* thread)
 {
 	OpcodeParams params(thread, 1);
-	params << *(unsigned short *)0xC81320;
+	params << (unsigned short)CWeather::OldWeatherType;
 	return OR_CONTINUE;
 }
 
@@ -682,9 +690,6 @@ OpcodeResult WINAPI General::SetCarCustomColor(CScriptThread* thread)
 	return OR_CONTINUE;
 }
 
-#define SfxVol (*(unsigned char *)0xBA6797)
-#define RadioVol (*(unsigned char *)0xBA6798)
-
 // 0D72=3,get_sfx_volume_to %2d% radio_volume_to %3d% type %1d%
 // 0D72: get_sfx_volume_to 0@ radio_volume_to NULL type TYPE_FLOAT
 // SCR: GET_GAME_VOLUME
@@ -694,9 +699,9 @@ OpcodeResult WINAPI General::GetGameVolume(CScriptThread* thread)
 	unsigned int type;
 	params >> type;
 	if(!params.IsOptionalParam())
-		params << (type? (float)SfxVol : SfxVol);
+		params << (type? (float)FrontEndMenuManager.m_nPrefsSfxVolume : FrontEndMenuManager.m_nPrefsSfxVolume);
 	if(!params.IsOptionalParam())
-		params << (type? (float)RadioVol : RadioVol);
+		params << (type? (float)FrontEndMenuManager.m_nPrefsMusicVolume : FrontEndMenuManager.m_nPrefsMusicVolume);
 	return OR_CONTINUE;
 }
 

@@ -1,6 +1,7 @@
 #include "Shape.h"
 #include "ShapeDrawer.h"
 #include "NewOpcodes.h"
+#include "game_sa\rw\skeleton.h"
 #include <math.h>
 
 // 0D40=8,draw_2d_shape_type %3d% texture %4d% numVerts %2d% pVerts %1d% vertexAlpha %5d% srcBlend %6d% dstBlend %7d% _unused %8d%
@@ -31,12 +32,12 @@ OpcodeResult WINAPI Shape::SetShapeVertex(CScriptThread* thread)
 	CRGBA color(b, g, r, a);
 	if(invX)
 	{
-		posn.x = (float)(*(int*)(0xC17044)) - posn.x;
+		posn.x = (float)RsGlobal.maximumWidth - posn.x;
 		u = 1.0f - u;
 	}
 	if(invY)
 	{
-		posn.y = (float)(*(int*)(0xC17048)) - posn.y;
+		posn.y = (float)RsGlobal.maximumHeight - posn.y;
 		v = 1.0f - v;
 	}
 	shapeDrawer.SetupShapeVertex(pVerts == 1 ? (RwD3D9Vertex *)(pVerts + (vertex - 1) * sizeof(RwD3D9Vertex)) :
