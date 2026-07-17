@@ -60,12 +60,14 @@ OpcodeResult WINAPI Memory::GetStructOffset(CScriptThread* thread)
 // SCR: SET_STRUCT_FIELD
 OpcodeResult WINAPI Memory::SetStructOffset(CScriptThread* thread)
 {
-	OpcodeParams params(thread, 3);
+	OpcodeParams params(thread, 4);
 	unsigned int struc, offset, size, value;
 	params >> struc >> offset >> size;
 	if(params.IsStringParam())
 		params >> (char *)(struc + offset);
-	else
+	else {
+		params >> value;
 		memcpy((void *)(struc + offset), &value, size);
+	}
     return OR_CONTINUE;
 }
