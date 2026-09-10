@@ -28,5 +28,5 @@ public:
 	static void ReInitialise();
 	static void Shutdown();
 	static void DefaultDraw();
-	static void BeforeScriptsProcessing();
+    static void ProcessScripts();
 };

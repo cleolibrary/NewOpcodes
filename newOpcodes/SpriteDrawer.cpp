@@ -65,6 +65,7 @@ void SpriteDrawer::DrawSprites()
 {
 	for(unsigned int i = 0; i < m_numSpritesThisFrame; i++)
 		m_sprites[i].Draw();
+	m_numSpritesThisFrame = 0;
 }
 
 void SpriteDrawer::Reset()
