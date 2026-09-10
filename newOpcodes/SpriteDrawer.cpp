@@ -1,5 +1,6 @@
 #include "SpriteDrawer.h"
 #include "game_sa\CSprite2d.h"
+#include "game_sa\CMenuManager.h"
 #include <math.h>
 
 SpriteDrawer spriteDrawer;
@@ -50,7 +51,11 @@ void SpriteDrawer::DrawSpriteThisFrame(RwTexture *texture, CRect const& rect, CR
 {
 	if(m_numSpritesThisFrame < MAX_NO_SPRITES)
 	{
-		m_sprites[m_numSpritesThisFrame].m_rect = rect;
+		// Translate from virtual 640x448 screen space to the actual resolution
+		m_sprites[m_numSpritesThisFrame].m_rect.left = FrontEndMenuManager.StretchX(rect.left);
+		m_sprites[m_numSpritesThisFrame].m_rect.top = FrontEndMenuManager.StretchY(rect.top);
+		m_sprites[m_numSpritesThisFrame].m_rect.right = FrontEndMenuManager.StretchX(rect.right);
+		m_sprites[m_numSpritesThisFrame].m_rect.bottom = FrontEndMenuManager.StretchY(rect.bottom);
 		m_sprites[m_numSpritesThisFrame].m_color[0] = color1;
 		m_sprites[m_numSpritesThisFrame].m_color[1] = color2;
 		m_sprites[m_numSpritesThisFrame].m_color[2] = color3;
