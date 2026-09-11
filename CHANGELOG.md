@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## v2.5
+## v2.5.1
+
+- Fixed a regression with the drawing opcodes (0D7E `draw_sprite_with_texture`, 0D7F, 0D40 `draw_shape`, 0D64/0D5B, etc.) rendering nothing
+- Fixed 0D7E `draw_sprite_with_texture` and 0D7F `draw_gradient_sprite_with_texture` not scaling their coordinates to the actual resolution
+
+## v2.5.0
 
 ### Features
 
