@@ -96,6 +96,7 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="NewOpcodes.h" />
     <ClInclude Include="OpcodeIds.h" />
+    <ClInclude Include="Version.h" />
     <ClInclude Include="Quat.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapeDrawer.h" />
@@ -136,6 +137,9 @@
     <ClCompile Include="Txd.cpp" />
     <ClCompile Include="TxdManager.cpp" />
     <ClCompile Include="Vector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NewOpcodes.rc" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="CLEO.lib" />

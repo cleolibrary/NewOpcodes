@@ -36,7 +36,7 @@ bool NewOpcodes::Initialise()
 	plugin::Events::initScriptsEvent += ReInitialise;
 	plugin::Events::shutdownRwEvent += Shutdown;
 	plugin::Events::drawingEvent += DefaultDraw;
-	plugin::Events::processScriptsEvent.before += BeforeScriptsProcessing;
+	plugin::Events::processScriptsEvent += ProcessScripts;
 	return true;
 }
 
@@ -64,13 +64,9 @@ void NewOpcodes::DefaultDraw()
 	spriteDrawer.DrawSprites();
 }
 
-void NewOpcodes::BeforeScriptsProcessing()
+void NewOpcodes::ProcessScripts()
 {
 	m_nCurrentCoronaId = 10000;
-	shapeDrawer.m_nNumShapesThisFrame = 0;
-	spotlightDrawer.m_dwNumSpotLightsThisFrame = 0;
-	textDrawer.m_dwNumPrintsThisFrame = 0;
-	spriteDrawer.m_numSpritesThisFrame = 0;
 }
 
 _pOpcodeHandler NewOpcodes::OpcodeFunctions[] = { 
