@@ -9,8 +9,6 @@ A CLEO plugin by [DK22Pac](https://github.com/DK22Pac) that adds new opcodes for
 1. Download the latest `NewOpcodes.cleo` from the [releases page](https://github.com/cleolibrary/NewOpcodes/releases).
 2. Copy the file in the `CLEO` folder of your GTA San Andreas installation.
 
-> **Note:** If using CLEO 5, copy the file in the `CLEO\CLEO_PLUGINS` folder instead.
-
 ## Documentation
 
 Full documentation for all NewOpcodes commands is available on the **Sanny Builder Library**:
